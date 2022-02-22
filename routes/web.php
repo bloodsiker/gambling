@@ -1,0 +1,34 @@
+<?php
+
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/success', [HomeController::class, 'showSuccessPage'])->name('success');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/game', [GameController::class, 'index'])->name('game.index');
+    Route::post('/game/lucky', [GameController::class, 'lucky'])->name('game.lucky');
+    Route::get('/game/history', [GameController::class, 'history'])->name('game.history');
+    Route::post('/profile/generate-new-link', [ProfileController::class, 'generateNewLink'])->name('profile.generate_new_link');
+    Route::post('/profile/deactivate-link', [ProfileController::class, 'deactivateLink'])->name('profile.deactivate_link');
+});
+
+Route::get('/game/{hash}', [GameController::class, 'secureLink'])->name('game.secure_link');
+
+Auth::routes();
+
+
